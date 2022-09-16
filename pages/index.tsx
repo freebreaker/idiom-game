@@ -1,6 +1,6 @@
 import type { GetStaticPropsContext, NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
+import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
@@ -18,17 +18,17 @@ const Home: NextPage = () => {
         </h1>
 
         <div className={styles.grid}>
-          <a href="/game/easy" className={styles.card}>
+          <Link href="/game/easy" className={styles.card}>
             <h2>入门 &rarr;</h2>
-          </a>
+          </Link>
 
-          <a href="/game/normal" className={styles.card}>
+          <Link href="/game/normal" className={styles.card}>
             <h2>普通 &rarr;</h2>
-          </a>
+          </Link>
 
-          <a href="/game/difficult" className={styles.card}>
+          <Link href="/game/difficult" className={styles.card}>
             <h2>困难 &rarr;</h2>
-          </a>
+          </Link>
         </div>
       </main>
     </div>

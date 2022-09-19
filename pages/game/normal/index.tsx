@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react'
 import { getRandomWord, getWordContainArr } from '../../../tools/game'
 import { IWord } from '../../api/game'
 import styles from './index.module.scss'
+import dynamic from 'next/dynamic'
+const ReactJson = dynamic(() => import('react-json-view'), { ssr: false })
+
 
 // const xBlockNum = 10
 // const yBlockNum = 10
@@ -30,6 +33,7 @@ const Game: NextPage = () => {
   const [yBlockNum, setYBlockNum] = useState(20)
   initData = createData(xBlockNum, yBlockNum)
   const [data, setData] = useState<string[][]>(createData(xBlockNum, yBlockNum))
+  const [rendered, setRendered] = useState(false)
   useEffect(() => {
     initData = createData(xBlockNum, yBlockNum)
     setData(initData)
@@ -54,6 +58,7 @@ const Game: NextPage = () => {
     console.log(initData, idiomDic, count)
     if (count < 1) {
       message.success({ content: '生成成功!', key, duration: 2 });
+      setRendered(true)
       return
     }
     idiomDic[idiom.word] = {
@@ -237,12 +242,21 @@ const Game: NextPage = () => {
           </Button>
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button onClick={refresh}>
+          <Button onClick={() => {
+            message.loading({ content: '生成中', key })
+            refresh()
+          }}>
             刷新
           </Button>
         </Form.Item>
       </Form>
-
+      <div>
+        {
+          rendered ?
+            <ReactJson src={data} collapsed style={{ marginBottom: 50 }} />
+            : ''
+        }
+      </div>
       {
         data?.map((i, index) => (
           <div className={styles.line} key={index}>

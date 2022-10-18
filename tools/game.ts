@@ -13,3 +13,15 @@ export const getRandomWord = () => {
   const random = Math.floor(Math.random() * AllJson.length)
   return AllJson[random].words
 }
+
+export const checkIsHidden = (str: string) => {
+  return str[0] === '['
+}
+
+export const wordGenerate = (str: string) => {
+  if (str[0] === '[') {
+    return str[1]
+  } else {
+    return `[${str}]`
+  }
+}

@@ -2,10 +2,11 @@
 import { Button, Form, Input, InputNumber, message } from 'antd'
 import type { GetStaticPropsContext, NextPage } from 'next'
 import { useEffect, useState } from 'react'
-import { getRandomWord, getWordContainArr } from '../../../tools/game'
+import { checkIsHidden, getRandomWord, getWordContainArr, wordGenerate } from '../../../tools/game'
 import { IWord } from '../../api/game'
 import styles from './index.module.scss'
 import dynamic from 'next/dynamic'
+import { apiFetchAll } from '../../../tools/api'
 const ReactJson = dynamic(() => import('react-json-view'), { ssr: false })
 
 
@@ -29,11 +30,17 @@ let initData: string[][]
 const Game: NextPage = () => {
   const key = 'update'
   const [idiomCount, setIdiomCount] = useState(4)
-  const [xBlockNum, setXBlockNum] = useState(20)
-  const [yBlockNum, setYBlockNum] = useState(20)
+  const [xBlockNum, setXBlockNum] = useState(16)
+  const [yBlockNum, setYBlockNum] = useState(6)
   initData = createData(xBlockNum, yBlockNum)
   const [data, setData] = useState<string[][]>(createData(xBlockNum, yBlockNum))
   const [rendered, setRendered] = useState(false)
+
+  // 获取当前关卡
+  useEffect(() => {
+  }, [])
+
+
   useEffect(() => {
     initData = createData(xBlockNum, yBlockNum)
     setData(initData)
@@ -194,6 +201,22 @@ const Game: NextPage = () => {
 
   }
 
+  const handleJson = (x: number, y: number, _data: string[][]) => {
+    console.log(x, y)
+    const str = data[x][y]
+    const copyData = JSON.parse(JSON.stringify(_data))
+    if (!str) return
+    if (!checkIsHidden(str)) {
+      // hidden
+      copyData[x][y] = wordGenerate(str)
+      setData(copyData)
+    } else {
+      // show
+      copyData[x][y] = wordGenerate(str)
+      setData(copyData)
+    }
+  }
+
   return (
     <div className={styles.container}>
       <Form
@@ -262,10 +285,13 @@ const Game: NextPage = () => {
           <div className={styles.line} key={index}>
             {i.map((j, _index) => (
               <div className={j ? styles.activeBox : styles.box}
-                // style={{
-                //   background: j ? '#1e80ff' : '',
-                //   color: j ? '#fff' : '',
-                // }}
+                style={{
+                  background: checkIsHidden(j) ? 'orange' : '',
+                  color: checkIsHidden(j) ? 'black' : ""
+                }}
+                onClick={() => {
+                  handleJson(index, _index, data)
+                }}
                 key={_index}>
                 {j}
                 <p>{`(${_index}, ${index})`}</p>
@@ -274,7 +300,7 @@ const Game: NextPage = () => {
           </div>
         ))
       }
-    </div>
+    </div >
   )
 }
 export async function getStaticProps(context: GetStaticPropsContext) {

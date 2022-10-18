@@ -6,7 +6,6 @@ import { checkIsHidden, getRandomWord, getWordContainArr, wordGenerate } from '.
 import { IWord } from '../../api/game'
 import styles from './index.module.scss'
 import dynamic from 'next/dynamic'
-import { apiFetchAll } from '../../../tools/api'
 const ReactJson = dynamic(() => import('react-json-view'), { ssr: false })
 
 

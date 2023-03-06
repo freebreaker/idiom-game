@@ -36,9 +36,9 @@ const Home: NextPage = () => {
             <h2 className={styles.card}>普通 &rarr;</h2>
           </Link>
 
-          <Link href="/game/difficult">
+          {/* <Link href="/game/difficult">
             <h2 className={styles.card}>困难 &rarr;</h2>
-          </Link>
+          </Link> */}
         </div>
       </main>
     </div>

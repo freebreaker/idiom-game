@@ -67,7 +67,7 @@ const Home: NextPage = () => {
       const page = PrefixInteger(index, 3)
       const coverImage = `https://k12-nse-cdn.unipus.cn/books/1l${grade}_V2/cover${page}/1l${grade}_V2_c${page}.jpg?v=20231119500`
       const pageImage = `https://k12-nse-cdn.unipus.cn/books/1l${grade}_V2/page${page}/1l${grade}_V2_p${page}.jpg?v=20231119500`
-      const img = index <  6 && await isImg(coverImage) ? coverImage : pageImage
+      const img = index < 6 && await isImg(coverImage) ? coverImage : pageImage
       imgs.push(img)
     }
     return imgs
@@ -75,9 +75,10 @@ const Home: NextPage = () => {
 
   // 获取当前关卡
   useEffect(() => {
-    const data = DataJson.map((i) => {
+    const data = DataJson.map((i, index) => {
       return {
         ...i,
+        key: index,
         data: groupData(i.data).map((item) => ({
           ...item,
           page: Number(item.page)
@@ -131,8 +132,8 @@ const Home: NextPage = () => {
             onVisibleChange: (vis) => setVisible(vis)
           }}>
           {
-            currentImages.map((i) => (
-              <IImage src={i} />
+            currentImages.map((i, index) => (
+              <IImage src={i} key={index} />
             ))
           }
         </IImage.PreviewGroup>

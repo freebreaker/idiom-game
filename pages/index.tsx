@@ -14,105 +14,6 @@ interface DataType {
 
 const Home: NextPage = () => {
 
-  const levelObj = {
-    1: {
-      text: '简单',
-      color: 'green',
-      link: 'easy'
-    },
-    2: {
-      text: '一般',
-      color: 'blue',
-      link: 'normal'
-    },
-    3: {
-      text: '困难',
-      color: 'error',
-      link: 'difficult'
-    }
-  }
-  const [data, setData] = useState([])
-  // 获取当前关卡
-  useEffect(() => {
-    axios('/levels', {
-      headers: {
-        'Cache-Control': 'no-cache'
-      }
-    }).then((res) => {
-      setData(res.data)
-    })
-  }, [])
-
-  const columns: ColumnsType<DataType> = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      align: 'center',
-      key: 'name',
-    },
-    {
-      title: '第几关排序',
-      dataIndex: 'sort',
-      align: 'center',
-      key: 'sort',
-    },
-    {
-      title: '第几关排序',
-      dataIndex: 'sort',
-      align: 'center',
-      key: 'sort',
-    },
-    {
-      title: '矩阵',
-      dataIndex: 'matrix',
-      key: 'sort',
-      align: 'center',
-      width: '30%',
-      render: (record, _, action) => [
-        <Paragraph style={{ textAlign: 'center', wordBreak: 'break-word' }} copyable={{ tooltips: false }}>{record}</Paragraph>
-      ],
-    },
-    {
-      title: '难易等级',
-      key: 'level',
-      dataIndex: 'level',
-      align: 'center',
-      filters: [
-        {
-          text: '简单',
-          value: '1',
-        },
-        {
-          text: '一般',
-          value: '2',
-        },
-        {
-          text: '困难',
-          value: '3'
-        }
-      ],
-      onFilter: (value, record: any) => record.level == value,
-      render: (level: 1) => (
-        <span>
-          <Tag color={levelObj[level].color}>
-            {levelObj[level].text}
-          </Tag>
-        </span>
-      ),
-    },
-    {
-      title: '编辑',
-      key: 'level',
-      align: 'center',
-      render: (record) => (
-        // @ts-ignore
-        <a style={{ color: '#0070f3' }} href={`/game/${levelObj[record.level].link}?id=${record.id}`}>
-          编辑
-        </a>
-      ),
-    },
-  ]
-
   return (
     <div className={styles.container}>
       <Head>
@@ -140,7 +41,6 @@ const Home: NextPage = () => {
           </Link>
         </div>
       </main>
-      <Table columns={columns} dataSource={data} />
     </div>
   )
 }
